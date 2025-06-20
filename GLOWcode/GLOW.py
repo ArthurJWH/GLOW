@@ -3,7 +3,7 @@ G.L.O.W. App
 
 Author: Arthur Jiun Wei Hwang
 
-Latest update: 08-06-2025
+Latest update: 20-06-2025
 """
 
 import math

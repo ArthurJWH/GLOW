@@ -53,6 +53,8 @@ This button will calculate the position of each object (if all objects fit in th
 
 Obs.: the code creates a rectangle within which are the objects and analyze the fitting of it in the substrate.
 
+Obs.: the code prioritizes a filled grid formation.
+
 ### Add position
 When clicking in the plot from `Printing Configuration` a point (x, y) will be selected.
 
@@ -89,6 +91,8 @@ The interface has both graphical and text displays, that allow user to view curr
     - `Camera start delay` : is the delay itt takes the camera to record after it starts;
     - `Camera sampling interval`  : is the interval between image capturing;
     - machine specific codes to turn on/off and start the camera;
+
+Obs.: `Cooldown intertracks`, `Cooldown interlayers` and `Cooldown interobjects` can be a value or a sequence of values separated by "," (e.g. 1,2,3). If a sequence is given the code will loop through it, restarting on every layer if intertracks or object if interobjects.
 
 ### Machine Specific Code
  - indices: are the number by which the machine refers to each component;

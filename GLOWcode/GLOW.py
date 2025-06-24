@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
         main_layout.addStretch()
 
     def info(self) -> None:
-        self.info_dialog = QDialog()
+        self.info_dialog = QDialog(self)
         self.info_dialog.resize(600, 600)
         self.info_dialog.setContentsMargins(20, 0, 20, 20)
         self.info_dialog.move(600, 0)
@@ -1108,7 +1108,15 @@ class GLOWCalculator(QWidget):
             for i, position in enumerate(self.positions):
                 if i > 0:
                     self.gcode.append(
-                        f"\nG4 P{self.cdo_input.text()} ; add cooldown between objects\n"
+                        f"""\nG4 P{
+                            value
+                            if "," not in (value := self.cdo_input.text().strip(", "))
+                            else value
+                            .split(",")[
+                                (i - 1) % (value.count(",") + 1)
+                            ]
+                            .strip()
+                        } ; add cooldown between objects\n"""
                     )
                 self.gcode.append(f"\n;===Starting {shape} {i + 1}===\n")
                 x, y, z = position
@@ -1135,7 +1143,15 @@ class GLOWCalculator(QWidget):
                 while curr_height <= height:
                     if curr_layer > 0:
                         self.gcode.append(
-                            f"\nG4 P{self.cdl_input.text()}; add cooldown between layers\n"
+                            f"""\nG4 P{
+                                value
+                                if "," not in (value := self.cdl_input.text().strip(", "))
+                                else value
+                                .split(",")[
+                                    (curr_layer - 1) % (value.count(",") + 1)
+                                ]
+                                .strip()
+                            } ; add cooldown between layers\n"""
                         )
                     curr_length = 0
                     curr_track = 0
@@ -1178,7 +1194,15 @@ class GLOWCalculator(QWidget):
                     ):  # TODO : assumes hlength == v_length
                         if curr_track > 0:
                             self.gcode.append(
-                                f"\nG4 P{self.cdt_input.text()} ; add cooldown between tracks\n"
+                                f"""\nG4 P{
+                                    value
+                                    if "," not in (value := self.cdt_input.text().strip(", "))
+                                    else value
+                                    .split(",")[
+                                        (curr_track - 1) % (value.count(",") + 1)
+                                    ]
+                                    .strip()
+                                } ; add cooldown between tracks\n"""
                             )
                         if vertical:
                             if y_direction:

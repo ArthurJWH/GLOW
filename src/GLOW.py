@@ -44,7 +44,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from ML import meltpool_geom_cal
 
 
-APP_DIR = str(Path(__file__).resolve().parent)
+APP_DIR = str(Path(__file__).resolve().parent.parent)
 
 
 class MainWindow(QMainWindow):
@@ -53,11 +53,11 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("G-Code for Laser Operated Work")
 
         if sys.platform.startswith("win"):
-            app.setWindowIcon(QIcon(APP_DIR + "\\..\\assets\\img\\icon.ico"))
+            app.setWindowIcon(QIcon(APP_DIR + "\\assets\\img\\icon.ico"))
         elif sys.platform == "darwin":
-            app.setWindowIcon(QIcon(APP_DIR + "\\..\\assets\\img\\icon.icns"))
+            app.setWindowIcon(QIcon(APP_DIR + "\\assets\\img\\icon.icns"))
         else:
-            app.setWindowIcon(QIcon(APP_DIR + "\\..\\assets\\img\\icon.png"))
+            app.setWindowIcon(QIcon(APP_DIR + "\\assets\\img\\icon.png"))
         self.resize(1200, 600)
 
         scroll_area = QScrollArea()
@@ -102,7 +102,7 @@ class MainWindow(QMainWindow):
         self.info_dialog.setContentsMargins(20, 0, 20, 20)
         self.info_dialog.move(600, 0)
         self.info_dialog.setWindowTitle("Information")
-        with open(APP_DIR + "\\..\\docs\\info.md", "r", encoding="utf-8") as f:
+        with open(APP_DIR + "\\docs\\info.md", "r", encoding="utf-8") as f:
             md_text = f.read()
 
         info = QTextEdit()
@@ -198,7 +198,7 @@ class GLOWCalculator(QWidget):
 
         title_layout = QHBoxLayout()
         title = QLabel()
-        pixmap = QPixmap(APP_DIR + "\\..\\assets\\img\\title.png")
+        pixmap = QPixmap(APP_DIR + "\\assets\\img\\title.png")
         pixmap = pixmap.scaledToHeight(50, Qt.TransformationMode.SmoothTransformation)
         # title.setStyleSheet(
         #     "QLabel {font-family: 'Roboto'; font-size: 24px; font-weight: 700; color: #000000;}"

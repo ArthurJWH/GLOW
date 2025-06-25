@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 ## ---------------------- Load the trained ML models ------------------------ #
-model_path = str(Path(__file__).resolve().parent) + "\\..\\assets\\ML_models\\"
+model_path = str(Path(__file__).resolve().parent.parent) + "\\assets\\ML_models\\"
 
 para2geom = load_model(model_path + "para2geom.h5", compile=False)
 para2geom_pca = joblib.load(model_path + "pca_transformer.pkl")

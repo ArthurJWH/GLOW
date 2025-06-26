@@ -1,0 +1,34 @@
+[project]
+name = "glow"
+version = "1.0.0"
+description = "G-Code for Laser Operated Work App"
+authors = [
+    { name = "Arthur Jiun Wei Hwang" }
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "PyQt6",
+    "PyQt6-WebEngine",
+    "matplotlib",
+    "pandas",
+    "numpy",
+    "opencv-python",
+    "joblib",
+    "keras",
+]
+
+[project.urls]
+repository = "https://github.com/ArthurJWH/GLOW"
+
+[project.optional-dependencies]
+app = [
+    "pyinstaller",
+    "ipykernel"]
+
+[project.scripts]
+glow = "GLOW:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

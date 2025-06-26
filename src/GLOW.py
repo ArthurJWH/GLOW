@@ -3,7 +3,7 @@ G.L.O.W. App
 
 Author: Arthur Jiun Wei Hwang
 
-Latest update: 20-06-2025
+Latest update: 26-06-2025
 """
 
 import math
@@ -49,7 +49,7 @@ APP_DIR = str(Path(__file__).resolve().parent.parent)
 
 
 class MainWindow(QMainWindow):
-    def __init__(self) -> None:
+    def __init__(self, app: QApplication) -> None:
         super().__init__()
         self.setWindowTitle("G-Code for Laser Operated Work")
 
@@ -1095,7 +1095,10 @@ class GLOWCalculator(QWidget):
                 height_data = []
                 for row in csv_data.itertuples():
                     w, h = meltpool_geom_cal(
-                        row.laser_power, row.scanning_speed, row.rpm_1 + row.rpm_2, row.hatch_spacing
+                        row.laser_power,
+                        row.scanning_speed,
+                        row.rpm_1 + row.rpm_2,
+                        row.hatch_spacing,
                     )
                     if ml_w:
                         width_data.append(w)
@@ -1686,7 +1689,7 @@ class FileDrop(QLabel):
             self.setText(f"File: {self.file_path.name}")
 
 
-if __name__ == "__main__":
+def main():
     app = QApplication(sys.argv)
     app.setStyleSheet(
         """
@@ -1734,6 +1737,10 @@ if __name__ == "__main__":
         }
     """
     )
-    window = MainWindow()
+    window = MainWindow(app)
     window.show()
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()

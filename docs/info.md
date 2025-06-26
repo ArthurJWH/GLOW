@@ -1,5 +1,5 @@
 <!-- Ctrl + Shift + V to read -->
-# G.L.O.W. Documentation <sub><sup><sub> by Arthur Hwang </sub></sup></sub> <br/>
+# G.L.O.W. Documentation
 
 ## G-Code Generator
 
@@ -105,4 +105,4 @@ Obs.: `Cooldown intertracks`, `Cooldown interlayers` and `Cooldown interobjects`
 <br/>
 
 ## NC viewer
-It connects with NC viewer website (https://ncviewer.com/) allowing for easy visualization of `.gcode` files
+It connects with NC viewer website (https://ncviewer.com/) allowing for easy visualization of `.gcode` files.

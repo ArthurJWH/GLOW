@@ -26,7 +26,7 @@ model_path = str(Path(__file__).resolve().parent.parent) + "\\assets\\ML_models\
 para2geom = load_model(model_path + "para2geom.h5", compile=False)
 para2geom_pca = joblib.load(model_path + "pca_transformer.pkl")
 sc = joblib.load(model_path + "sc.bin")
-# hs2angle = joblib.load(model_path + "hs2angle.pkl")
+hs2angle = joblib.load(model_path + "hs2angle.pkl")
 
 
 # calculate meltpool geometries from prediction. Can also visualize/save the meltpool. The input mp is the
@@ -36,6 +36,7 @@ def meltpool_geom_cal(
     power,
     speed,
     rpm,
+    hatch_spacing,
     para2geom=para2geom,
     para2geom_pca=para2geom_pca,
     sc=sc,
@@ -76,5 +77,39 @@ def meltpool_geom_cal(
     width = x_ext_r - x_ext_l
     height = abs(y_ext_high - y_centre)
 
-    # print('The width is {0}'.format(width))
-    return width * scale, height * scale
+    angle = hs2angle.predict([[width, speed, hatch_spacing, height]])[0]
+
+    coords = np.argwhere(mp_true)
+
+    y_min, x_min = coords.min(axis=0)
+    y_max, x_max = coords.max(axis=0)
+
+    aoi = mp_true[max(y_min - 10, 0) : y_max + 10, max(x_min - 10, 0) : x_max + 10]
+    aoi_mask = (aoi > 0).astype(np.uint8)
+
+    center = (aoi.shape[1] // 2, aoi.shape[0] // 2)
+    rot_matrix = cv2.getRotationMatrix2D(center, 360 - angle, 1.0)
+    rotated_image = cv2.warpAffine(
+        aoi, rot_matrix, (aoi.shape[1] + 50, aoi.shape[0] + 50)
+    )
+    rotated_mask = cv2.warpAffine(
+        aoi_mask, rot_matrix, (aoi_mask.shape[1] + 50, aoi_mask.shape[0] + 50)
+    )
+
+    coords_mp = np.argwhere(aoi)
+    _, x_idx_max_mp = np.argmax(coords_mp, axis=0)
+
+    right_most_homogeneous = np.array(
+        [coords_mp[x_idx_max_mp][1], coords_mp[x_idx_max_mp][0], 1]
+    )
+    right_most_new = np.dot(rot_matrix, right_most_homogeneous)
+
+    coords_mp_rotated = np.argwhere(rotated_image)
+    y_min, x_min = coords_mp_rotated.min(axis=0)
+    y_max, x_max = coords_mp_rotated.max(axis=0)
+
+
+    rotated_mp_height = right_most_new[1] - y_min
+    # rotated_mp_depth = y_max - right_most_new[1]
+
+    return width * scale * np.cos(angle), rotated_mp_height * scale

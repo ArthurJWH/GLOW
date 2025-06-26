@@ -1095,7 +1095,7 @@ class GLOWCalculator(QWidget):
                 height_data = []
                 for row in csv_data.itertuples():
                     w, h = meltpool_geom_cal(
-                        row.laser_power, row.scanning_speed, row.rpm_1 + row.rpm_2
+                        row.laser_power, row.scanning_speed, row.rpm_1 + row.rpm_2, row.hatch_spacing
                     )
                     if ml_w:
                         width_data.append(w)

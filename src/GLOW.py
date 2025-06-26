@@ -11,7 +11,7 @@ import sys
 import pandas as pd
 from pathlib import Path
 
-from PyQt6.QtCore import Qt, QSettings
+from PyQt6.QtCore import Qt, QSettings, QUrl
 from PyQt6.QtGui import QDragEnterEvent, QDropEvent, QMouseEvent, QColor, QIcon, QPixmap
 from PyQt6.QtWidgets import (
     QApplication,
@@ -35,6 +35,7 @@ from PyQt6.QtWidgets import (
     QFileDialog,
     QScrollArea,
 )
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -603,6 +604,18 @@ class GLOWCalculator(QWidget):
         button_layout.addStretch(7)
         settings_layout.addLayout(button_layout, 1)
 
+        nc_widget = QWidget()
+        tab_widget.addTab(nc_widget, "NC Viewer")
+
+        nc_layout = QVBoxLayout(nc_widget)
+        nc_layout.setSpacing(3)
+        nc_layout.setContentsMargins(20, 10, 20, 20)
+
+        self.nc_viewer = QWebEngineView()
+        self.nc_viewer.setUrl(QUrl("https://ncviewer.com/"))
+
+        nc_layout.addWidget(self.nc_viewer)
+
     def plot(self) -> None:
         self.ax.clear()
         self.ax.grid(
@@ -1077,6 +1090,7 @@ class GLOWCalculator(QWidget):
             ) and shape != "Single Track"
 
             if ml_w or ml_h:
+                self.display.addItem("Using machine learning model...")
                 width_data = []
                 height_data = []
                 for row in csv_data.itertuples():
@@ -1111,11 +1125,9 @@ class GLOWCalculator(QWidget):
                         f"""\nG4 P{
                             value
                             if "," not in (value := self.cdo_input.text().strip(", "))
-                            else value
-                            .split(",")[
+                            else value.split(",")[
                                 (i - 1) % (value.count(",") + 1)
-                            ]
-                            .strip()
+                            ].strip()
                         } ; add cooldown between objects\n"""
                     )
                 self.gcode.append(f"\n;===Starting {shape} {i + 1}===\n")
@@ -1145,12 +1157,11 @@ class GLOWCalculator(QWidget):
                         self.gcode.append(
                             f"""\nG4 P{
                                 value
-                                if "," not in (value := self.cdl_input.text().strip(", "))
-                                else value
-                                .split(",")[
+                                if ","
+                                not in (value := self.cdl_input.text().strip(", "))
+                                else value.split(",")[
                                     (curr_layer - 1) % (value.count(",") + 1)
-                                ]
-                                .strip()
+                                ].strip()
                             } ; add cooldown between layers\n"""
                         )
                     curr_length = 0
@@ -1196,12 +1207,11 @@ class GLOWCalculator(QWidget):
                             self.gcode.append(
                                 f"""\nG4 P{
                                     value
-                                    if "," not in (value := self.cdt_input.text().strip(", "))
-                                    else value
-                                    .split(",")[
+                                    if ","
+                                    not in (value := self.cdt_input.text().strip(", "))
+                                    else value.split(",")[
                                         (curr_track - 1) % (value.count(",") + 1)
-                                    ]
-                                    .strip()
+                                    ].strip()
                                 } ; add cooldown between tracks\n"""
                             )
                         if vertical:

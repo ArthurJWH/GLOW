@@ -101,3 +101,8 @@ Obs.: `Cooldown intertracks`, `Cooldown interlayers` and `Cooldown interobjects`
 ### Reset & Save
  - `Reset` : resets the configuration to the last saved one;
  - `Save` : the changed configuration can be used while the GUI is opened, but for convenience the save button allows the configuration to be saved for future applications;
+
+<br/>
+
+## NC viewer
+It connects with NC viewer website (https://ncviewer.com/) allowing for easy visualization of `.gcode` files

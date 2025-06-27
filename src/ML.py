@@ -98,18 +98,12 @@ def meltpool_geom_cal(
     y_max, x_max = coords.max(axis=0)
 
     aoi = mp_true[max(y_min - 10, 0) : y_max + 10, max(x_min - 10, 0) : x_max + 10]
-    aoi_mask = (aoi > 0).astype(np.uint8)
 
     center = (aoi.shape[1] // 2, aoi.shape[0] // 2)
     rot_matrix = cv2.getRotationMatrix2D(center, 360 - angle, 1.0)
     rotated_image = cv2.warpAffine(
         aoi, rot_matrix, (aoi.shape[1] + 50, aoi.shape[0] + 50)
     )
-    rotated_mask = cv2.warpAffine(
-        aoi_mask, rot_matrix, (aoi_mask.shape[1] + 50, aoi_mask.shape[0] + 50)
-    )
-
-    patterned_image = np.zeros((1000, 1000))
 
     coords_mp = np.argwhere(aoi)
     _, x_idx_max_mp = np.argmax(coords_mp, axis=0)
@@ -126,82 +120,4 @@ def meltpool_geom_cal(
     rotated_mp_height = right_most_new[1] - y_min
     # rotated_mp_depth = y_max - right_most_new[1]
 
-    coords_patterned = np.argwhere(patterned_image)
-    y_min_patterned, x_min_patterned = coords_patterned.min(axis=0)
-    y_max_patterned, x_max_patterned = coords_patterned.max(axis=0)
-    surface_padding = 0  # extrat pattern to prevent unnecessary crop
-    patterned_image = patterned_image[
-        y_min_patterned - surface_padding : y_max_patterned + surface_padding,
-        x_min_patterned : x_max_patterned + surface_padding,
-    ]
-
-    surface_mask = (patterned_image > 0).astype(np.uint8)
-    # ratio of overlap in height
-    t_ratio = 1
-    counter = 0
-    # Place the surface repeatedly in the new image until there is no zero values in the centre 50%
-    while True:
-        # Establish an array of all zero
-        cube = np.zeros((1000, patterned_image.shape[1]))
-        cube_to_check = np.zeros((1000, patterned_image.shape[1]))
-        # Calculate the current layer thickness
-        layer_t = int(rotated_mp_height * t_ratio)
-
-        # Pattern the layers
-        for i in range(2):
-            x_offset = 0
-            total_height = 2 * patterned_image.shape[0]
-
-            # Define the region of interest in the destination image
-            roi = cube[
-                total_height - patterned_image.shape[0] - layer_t * i : total_height
-                - layer_t * i,
-                x_offset : x_offset + patterned_image.shape[1],
-            ]
-            roi_to_check = cube_to_check[
-                total_height - patterned_image.shape[0] - layer_t * i : total_height
-                - patterned_image.shape[0]
-                - layer_t * i
-                + surface_mask[0 : rotated_mp_height + surface_padding, :].shape[0],
-                x_offset : x_offset + patterned_image.shape[1],
-            ]
-
-            # Update only the AOI regions using the mask
-            np.copyto(roi, patterned_image, where=surface_mask.astype(bool))
-            np.copyto(
-                roi_to_check,
-                patterned_image[0 : rotated_mp_height + surface_padding, :],
-                where=surface_mask[0 : rotated_mp_height + surface_padding, :].astype(
-                    bool
-                ),
-            )
-
-            surface = np.fliplr(patterned_image)
-            surface_mask = np.fliplr(surface_mask)
-        # Crop the image to the width of the patterned AOIs
-        coords_cube = np.argwhere(cube)
-        y_min_cube, x_min_cube = coords_cube.min(axis=0)
-        y_max_cube, x_max_cube = coords_cube.max(axis=0)
-        cube = cube[(y_min_cube - 1) : (y_max_cube + 1), x_min_cube : (x_max_cube + 1)]
-        cube_to_check = cube_to_check[
-            (y_min_cube - 1) : (y_max_cube + 1), x_min_cube : (x_max_cube + 1)
-        ]
-
-        cube_to_check_centre = cube_to_check[
-            int(cube.shape[0] * 0.25) : int(cube.shape[0] * 0.75),
-            int(cube.shape[1] * 0.25) : int(cube.shape[1] * 0.75),
-        ]
-
-        # if all cube images should be plotted
-        if counter == 0:
-            porosity_init = np.count_nonzero(cube_to_check_centre == 0)
-
-        porosity = np.count_nonzero(cube_to_check_centre == 0)
-        counter = counter + 1
-        # Check pores
-        if porosity <= porosity_init * 0.1:
-            break
-        else:
-            t_ratio = t_ratio - 0.01
-
-    return width * scale * np.cos(angle), rotated_mp_height * scale, t_ratio
+    return width * scale, rotated_mp_height * scale

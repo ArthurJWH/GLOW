@@ -1094,15 +1094,11 @@ class GLOWCalculator(QWidget):
             ml_h = (
                 "height" not in csv_data or self.use_ml.isChecked()
             ) and shape != "Single Track"
-            ml_lh = (
-                "layer_height" not in csv_data or self.use_ml.isChecked()
-            ) and shape != "Single Track"
 
-            if ml_w or ml_h or ml_lh:
+            if ml_w or ml_h:
                 self.display.addItem("Using machine learning model...")
                 width_data = []
                 height_data = []
-                layer_height_data = []
                 for row in csv_data.itertuples():
                     w, h, lh = meltpool_geom_cal(
                         row.laser_power,
@@ -1114,16 +1110,11 @@ class GLOWCalculator(QWidget):
                         width_data.append(w)
                     if ml_h:
                         height_data.append(h)
-                    if ml_lh:
-                        layer_height_data.append(lh)
 
                 if ml_w:
                     csv_data["width"] = width_data
                 if ml_h:
                     csv_data["height"] = height_data
-                if ml_lh:
-                    csv_data["layer_height"] = layer_height_data
-                print(layer_height_data)
 
                 csv_path = self.filedrop.file_path.parent / (
                     self.filedrop.file_path.stem + "_with_ML_data.csv"

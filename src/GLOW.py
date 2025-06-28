@@ -44,6 +44,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from ML import meltpool_geom_cal
 
+
 def resource_path(relative_path: str) -> str:
     """Get the absolute path to the resource, works for development and PyInstaller."""
     try:
@@ -1094,27 +1095,38 @@ class GLOWCalculator(QWidget):
             ml_h = (
                 "height" not in csv_data or self.use_ml.isChecked()
             ) and shape != "Single Track"
+            ml_lh = (
+                "layer_height" not in csv_data or self.use_ml.isChecked()
+            ) and shape != "Single Track"
 
-            if ml_w or ml_h:
+            if ml_w or ml_h or ml_lh:
                 self.display.addItem("Using machine learning model...")
                 width_data = []
                 height_data = []
+                layer_height_data = []
                 for row in csv_data.itertuples():
                     w, h, lh = meltpool_geom_cal(
-                        row.laser_power,
-                        row.scanning_speed,
-                        row.rpm_1 + row.rpm_2,
-                        row.hatch_spacing,
+                        power=row.laser_power,
+                        speed=row.scanning_speed,
+                        rpm=row.rpm_1 + row.rpm_2,
+                        hatch_spacing=row.hatch_spacing,
+                        rotate=shape == "Cube",
+                        num_tracks=5 if shape == "Cube" else 1,
+                        num_layers=3,
                     )
                     if ml_w:
                         width_data.append(w)
                     if ml_h:
                         height_data.append(h)
+                    if ml_lh:
+                        layer_height_data.append(lh)
 
                 if ml_w:
                     csv_data["width"] = width_data
                 if ml_h:
                     csv_data["height"] = height_data
+                if ml_lh:
+                    csv_data["layer_height"] = layer_height_data
 
                 csv_path = self.filedrop.file_path.parent / (
                     self.filedrop.file_path.stem + "_with_ML_data.csv"

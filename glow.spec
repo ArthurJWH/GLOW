@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 a = Analysis(
-    ['src\\GLOW.py'],
+    ['src\\glow.py'],
     pathex=['src'],
     binaries=[],
     datas=[

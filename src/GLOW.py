@@ -42,7 +42,7 @@ import matplotlib.patches as patches
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-from ML import meltpool_geom_cal
+from ml import meltpool_geom_cal
 
 
 def resource_path(relative_path: str) -> str:

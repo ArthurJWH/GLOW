@@ -21,10 +21,10 @@ Obs.: the heading must contain the column name as specified above.
 
 Obs.: at least one rpm column must be on the CSV file.
 
-Obs.: if `width` or `height` is missing and it is required for the G-Code, the Machine Learning model will be used to predict it.
+Obs.: if `width` or `height` or `layer_height` is missing and it is required for the G-Code, the Machine Learning model will be used to predict it.
 
 ### Use ML model prediction
-This option allows users to use a trained (in single powder prints) Machine Learning model to predict the width and height of the tracks.
+This option allows users to use a trained (in single powder prints) Machine Learning model to predict the width, height and layer overlap of the tracks.
 
 Whenever the ML model is used, a new CSV file will be created in the same folder as the original CSV file.
 
@@ -72,6 +72,8 @@ The G-Code will follow some rules:
 
 ### Display
 The interface has both graphical and text displays, that allow user to view current configuration and also receive feedback from the code;
+
+The plot is interactive, allowing : position selection, pan, zoom in/out and reset (`R` key).
 
 <br/>
 

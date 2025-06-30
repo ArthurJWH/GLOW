@@ -301,7 +301,21 @@ class GLOWCalculator(QWidget):
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
 
+        # self.canvas.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        # self.canvas.setFocus()
+        self.canvas.mpl_connect("figure_enter_event", lambda _: self.canvas.setFocus())
+        self.canvas.mpl_connect(
+            "figure_leave_event", lambda _: self.canvas.clearFocus()
+        )
         self.canvas.mpl_connect("button_press_event", self.on_click)
+        self.canvas.mpl_connect("scroll_event", self.on_scroll)
+        self.canvas.mpl_connect("motion_notify_event", self.on_motion)
+        self.canvas.mpl_connect("button_release_event", self.on_release)
+        self.canvas.mpl_connect("key_press_event", self.on_r_press)
+
+        self.clicked = False
+        self.dragging = False
+        self.last_mouse_pos = None
 
         self.ax = self.figure.add_subplot(111)
         self.ax.grid(
@@ -314,6 +328,9 @@ class GLOWCalculator(QWidget):
         self.ax.set_ylabel("Y Axis (mm)", fontsize=8)
         self.ax.tick_params(labelsize=8)
         self.ax.set_aspect("equal")
+        # self.ax.autoscale_view()
+        self.ax.autoscale()
+        self.figure.subplots_adjust(bottom=0.1)
         self.canvas.draw()
 
         display_tab.addWidget(self.canvas, 8)
@@ -699,18 +716,77 @@ class GLOWCalculator(QWidget):
                     )
                 )
 
-        self.ax.set_aspect("equal")
-        # # self.ax.relim()
-        # self.ax.autoscale()
-        self.ax.autoscale_view()
-        self.figure.subplots_adjust(bottom=0.2, left=0.2)
+        # self.ax.set_aspect("equal")
+        # self.ax.relim()
+        # self.ax.autoscale_view()
+        # self.figure.subplots_adjust(bottom=0.1)
+        self.ax.autoscale()
         self.canvas.draw()
 
     def on_click(self, event) -> None:
-        self.clicked_x = event.xdata
-        self.clicked_y = event.ydata
-        self.display.addItem(f"Clicked at x={self.clicked_x}, y={self.clicked_y}")
-        self.display.scrollToBottom()
+        if event.button == 1 and event.xdata is not None and event.ydata is not None:
+            self.clicked = True
+            self.last_mouse_pos = (event.x, event.y)
+            self.clicked_x = event.xdata
+            self.clicked_y = event.ydata
+
+    def on_scroll(self, event):
+        base_scale = 1.1
+        scale_factor = base_scale if event.step > 0 else 1 / base_scale
+
+        xdata = event.xdata
+        ydata = event.ydata
+        if xdata is None or ydata is None:
+            return
+
+        xlim = self.ax.get_xlim()
+        ylim = self.ax.get_ylim()
+
+        new_xlim = [
+            xdata - (xdata - xlim[0]) * scale_factor,
+            xdata + (xlim[1] - xdata) * scale_factor,
+        ]
+        new_ylim = [
+            ydata - (ydata - ylim[0]) * scale_factor,
+            ydata + (ylim[1] - ydata) * scale_factor,
+        ]
+
+        self.ax.set_xlim(new_xlim)
+        self.ax.set_ylim(new_ylim)
+        self.canvas.draw()
+
+    def on_motion(self, event):
+        if self.clicked and event.xdata is not None and event.ydata is not None:
+            self.dragging = True
+            dx = event.x - self.last_mouse_pos[0]
+            dy = event.y - self.last_mouse_pos[1]
+            self.last_mouse_pos = (event.x, event.y)
+
+            # Convert pixel movement to data movement
+            inv = self.ax.transData.inverted()
+            p1 = inv.transform((0, 0))
+            p2 = inv.transform((dx, dy))
+            dx_data = p1[0] - p2[0]
+            dy_data = p1[1] - p2[1]
+
+            xlim = self.ax.get_xlim()
+            ylim = self.ax.get_ylim()
+            self.ax.set_xlim([x + dx_data for x in xlim])
+            self.ax.set_ylim([y + dy_data for y in ylim])
+            self.canvas.draw()
+
+    def on_release(self, event):
+        if self.clicked and not self.dragging:
+            self.display.addItem(f"Clicked at x={self.clicked_x}, y={self.clicked_y}")
+            self.display.scrollToBottom()
+        self.clicked = False
+        self.dragging = False
+        self.last_mouse_pos = None
+
+    def on_r_press(self, event):
+        if event.key == "r":
+            self.ax.autoscale()
+            self.canvas.draw()
 
     def add_position(self) -> None:
         try:

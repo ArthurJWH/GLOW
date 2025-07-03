@@ -1,13 +1,9 @@
 ![GLOW Logo](assets/img/title.png)
 
-<hr>
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8--3.11-blue.svg)](https://www.python.org/downloads/)
 
 > G-Code generator for Direct Energy Deposition additive manufacturing
-
-<hr>
 
 ## Table of Contents
 
@@ -50,9 +46,11 @@
 
 To install G.L.O.W. app you can:
 
-1. Download [`glow_1.0_setup.exe`](glow_1.0_setup.exe) from the repository and run the installer (no repository cloning required).
+1. Download [`glow_1.0_setup.exe`](glow_1.0_setup.exe) from the repository and run the installer (no repository cloning required) or
 
 2. Clone the repository and follow [`glowapp.ipynb`](glowapp.ipynb) instructions.
+
+<br/>
 
 ## Running the source code
 
@@ -68,7 +66,7 @@ From there, it is recommended to create a [virtual environment](https://docs.pyt
 pip install -r requirements.txt
 ```
 
-After installing the packages, you can run the code in [`src\main.py`](src/main.py).
+After installing the packages, you can run the code in [`src/main.py`](src/main.py).
 
 Alternatively, to run on the terminal, you can run:
 
@@ -77,6 +75,8 @@ pip install -e .
 ```
 
 This will allow you to run the code with `glow` command in the terminal
+
+<br/>
 
 ## Using G.L.O.W.
 
@@ -97,7 +97,7 @@ After opening the App, drop or select the CSV file into the upload box
 
 And input the geometric parameters
 
-![Input parameters](docs/example/input_parameters.png)
+<img src="docs/example/input_parameters.png" alt="Input parameters" width="400"/>
 
 Pressing `Calculate positions` should display the resulting configuration on the plot
 

@@ -1,4 +1,4 @@
-![GLOW Logo](assets\img\title.png)
+![GLOW Logo](assets/img/title.png)
 
 <hr>
 
@@ -68,7 +68,7 @@ From there, it is recommended to create a [virtual environment](https://docs.pyt
 pip install -r requirements.txt
 ```
 
-After installing the packages, you can run the code in [`src\main.py`](src\main.py).
+After installing the packages, you can run the code in [`src\main.py`](src/main.py).
 
 Alternatively, to run on the terminal, you can run:
 
@@ -80,7 +80,7 @@ This will allow you to run the code with `glow` command in the terminal
 
 ## Using G.L.O.W.
 
-Firstly it is required a CSV file with some printing parameters, such as [example](docs\example\example.csv)
+Firstly it is required a CSV file with some printing parameters, such as [example](docs/example/example.csv)
 
 |   idx |   laser_power |   scanning_speed |   rpm_1 |   rpm_2 |   width |   height |   hatch_spacing |
 |------:|--------------:|-----------------:|--------:|--------:|--------:|---------:|----------------:|
@@ -93,21 +93,21 @@ Firstly it is required a CSV file with some printing parameters, such as [exampl
 
 After opening the App, drop or select the CSV file into the upload box
 
-![File upload box](docs\example\file_upload_box.png)
+![File upload box](docs/example/file_upload_box.png)
 
 And input the geometric parameters
 
-![Input parameters](docs\example\input_parameters.png)
+![Input parameters](docs/example/input_parameters.png)
 
 Pressing `Calculate positions` should display the resulting configuration on the plot
 
-![Printing configuration](docs\example\printing_configuration.png)
+![Printing configuration](docs/example/printing_configuration.png)
 
-If satisfied, press `Generate G-Code` to generate the [GCODE](docs\example\example.gcode)
+If satisfied, press `Generate G-Code` to generate the [GCODE](docs/example/example.gcode)
 
-![NC Viewer](docs\example\nc_viewer.png)
+![NC Viewer](docs/example/nc_viewer.png)
 
-> For more detailed and specific informations read [documentation](docs\info.md) or use the information button in the top-right corner of the GUI
+> For more detailed and specific informations read [documentation](docs/info.md) or use the information button in the top-right corner of the GUI
 
 <hr>
 

@@ -101,7 +101,7 @@ And input the geometric parameters
 
 Pressing `Calculate positions` should display the resulting configuration on the plot
 
-![Printing configuration](docs/example/printing_configuration.png)
+<img src="docs/example/printing_configuration.png" alt="Printing configuration" width="500">
 
 If satisfied, press `Generate G-Code` to generate the [GCODE](docs/example/example.gcode)
 

@@ -8,7 +8,6 @@ Created on Fri May 17 19:01:47 2024
 Contains helper functions and result visualization functions
 """
 
-import sys
 import cv2
 import warnings
 import joblib

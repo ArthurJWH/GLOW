@@ -27,7 +27,7 @@ app = [
     "ipykernel"]
 
 [project.scripts]
-glow = "GLOW:main"
+glow = "main:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]

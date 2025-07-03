@@ -23,12 +23,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 ## ---------------------- Load the trained ML models ------------------------ #
 def resource_path(relative_path: str) -> str:
-    """Get the absolute path to the resource, works for development and PyInstaller."""
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except AttributeError:
-        base_path = Path(__file__).resolve().parent.parent
+    base_path = Path(__file__).resolve().parent.parent
     return str((Path(base_path) / relative_path).resolve())
 
 

@@ -1,12 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 a = Analysis(
-    ['src\\glow.py'],
+    ['src\\main.py'],
     pathex=['src'],
     binaries=[],
     datas=[
         ('assets\\img\\', 'assets\\img'),
         ('assets\\ML_models\\', 'assets\\ML_models'),
+        ('docs\\', 'docs')
     ],
     hiddenimports=['cv2', 'sklearn', 'sklearn.pipeline', 'sklearn.neural_network'],
     hookspath=[],
@@ -43,4 +44,16 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon=['assets\\img\\icon.png'],
+    exclude_binaries=True,
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name='glow'
 )

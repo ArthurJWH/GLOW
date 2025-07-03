@@ -46,12 +46,7 @@ from ml import meltpool_geom_cal
 
 
 def resource_path(relative_path: str) -> str:
-    """Get the absolute path to the resource, works for development and PyInstaller."""
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except AttributeError:
-        base_path = Path(__file__).resolve().parent.parent
+    base_path = Path(__file__).resolve().parent.parent
     return str(Path(base_path) / relative_path)
 
 
@@ -220,9 +215,42 @@ class GLOWCalculator(QWidget):
         self.filedrop = FileDrop()
         side_tab.addWidget(self.filedrop, 2)
 
-        self.use_ml = QCheckBox("Use ML model prediction")
-        self.use_ml.setChecked(False)
-        side_tab.addWidget(self.use_ml, 1)
+        ml_layout = QHBoxLayout()
+        self.use_ml = QPushButton("Use ML model prediction", clicked=self.open_ml_options)
+        ml_layout.addWidget(self.use_ml, 1)
+        ml_layout.addStretch(4)
+        self.use_ml_all = QCheckBox("Use all")
+        self.use_ml_all.setChecked(False)
+        self.use_ml_all.toggled.connect(
+            lambda state: [
+                self.use_ml.setChecked(state),
+                self.use_ml_w.setChecked(state),
+                self.use_ml_h.setChecked(state),
+                # self.use_ml_angle.setChecked(state),
+                self.use_ml_lh.setChecked(state),
+            ] if state is True else None
+        )
+        self.use_ml_w = QCheckBox("Width")
+        self.use_ml_w.setChecked(False)
+        self.use_ml_w.toggled.connect(
+            lambda state: self.use_ml_all.setChecked(state) if state is False else None
+        )
+        self.use_ml_h = QCheckBox("Height")
+        self.use_ml_h.setChecked(False)
+        self.use_ml_h.toggled.connect(
+            lambda state: self.use_ml_all.setChecked(False) if state is False else None
+        )
+        # self.use_ml_angle = QCheckBox("Tilt angle")
+        # self.use_ml_angle.setChecked(False)
+        # self.use_ml_angle.toggled.connect(
+        #     lambda state: self.use_ml_all.setChecked(False) if state is False else None
+        # )
+        self.use_ml_lh = QCheckBox("Layer height")
+        self.use_ml_lh.setChecked(False)
+        self.use_ml_lh.toggled.connect(
+            lambda state: self.use_ml_all.setChecked(False) if state is False else None
+        )
+        side_tab.addLayout(ml_layout, 1)
 
         side_tab.addStretch(1)
 
@@ -805,6 +833,26 @@ class GLOWCalculator(QWidget):
             self.display.addItem(error)
             self.display.scrollToBottom()
 
+    def open_ml_options(self) -> None:
+        button = self.sender()
+        button_pos = button.mapToGlobal(button.rect().bottomLeft())
+
+        ml_dropdown = QFrame(self, Qt.WindowType.Popup)
+        ml_dropdown.move(button_pos)
+        ml_dropdown.setFrameShape(QFrame.Shape.Box)
+        ml_dropdown.setContentsMargins(20, 10, 20, 20)
+        ml_dropdown.setWindowTitle("Use ML prediction for:")
+
+        ml_layout = QVBoxLayout(ml_dropdown)
+
+        ml_layout.addWidget(self.use_ml_all, 1)
+        ml_layout.addWidget(self.use_ml_w, 1)
+        ml_layout.addWidget(self.use_ml_h, 1)
+        # ml_layout.addWidget(self.use_ml_angle, 1)
+        ml_layout.addWidget(self.use_ml_lh, 1)
+
+        ml_dropdown.show()
+
     def create_widget_track(self) -> QWidget:
         w = QWidget()
         layout = QGridLayout(w)
@@ -1166,13 +1214,13 @@ class GLOWCalculator(QWidget):
                 return None
 
             ml_w = (
-                "width" not in csv_data or self.use_ml.isChecked()
+                "width" not in csv_data or self.use_ml_w.isChecked()
             ) and shape == "Cube"
             ml_h = (
-                "height" not in csv_data or self.use_ml.isChecked()
+                "height" not in csv_data or self.use_ml_h.isChecked()
             ) and shape != "Single Track"
             ml_lh = (
-                "layer_height" not in csv_data or self.use_ml.isChecked()
+                "layer_height" not in csv_data or self.use_ml_lh.isChecked()
             ) and shape != "Single Track"
 
             if ml_w or ml_h or ml_lh:
@@ -1783,7 +1831,7 @@ class FileDrop(QLabel):
             self.setText(f"File: {self.file_path.name}")
 
 
-def main():
+def gui():
     app = QApplication(sys.argv)
     app.setStyleSheet(
         """
@@ -1836,5 +1884,3 @@ def main():
     sys.exit(app.exec())
 
 
-if __name__ == "__main__":
-    main()

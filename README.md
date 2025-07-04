@@ -21,22 +21,22 @@
 ## Features
 
 1. **Different printing shapes and substrates**
-    - Supports single tracks, thin walls and cubes printing shapes
-    - Supports rectangular and circular substrates
+    - Supports single tracks, thin walls and cubes printing shapes.
+    - Supports rectangular and circular substrates.
 
 2. **Easy visualization**
-    - Offers easy visualization of printing configuration
-    - Enables visualization of GCODE result with integrated [NC Viewer](https://ncviewer.com/)
+    - Offers easy visualization of printing configuration.
+    - Enables visualization of GCODE result with integrated [NC Viewer](https://ncviewer.com/).
 
 3. **Flexible configurations**
-    - Provides intuitive and easy parameter configuration for various applications
-    - Supports customized CNC machine specific codes within its application
+    - Provides intuitive and easy parameter configuration for various applications.
+    - Supports customized CNC machine specific codes within its application.
 
 4. **Machine learning prediction model**
-    - Provides machine learning model for geometry prediction
+    - Provides machine learning model for geometry prediction, using the code from [xshang93/AIDED](https://github.com/xshang93/AIDED).
 
 5. **Camera compatibility**
-    - Allows camera integration for process monitoring
+    - Allows camera integration for process monitoring.
 
 <hr>
 
@@ -68,19 +68,19 @@ pip install -r requirements.txt
 
 After installing the packages, you can run the code in [`src/main.py`](src/main.py).
 
-Alternatively, to run on the terminal, you can run:
+Alternatively, you can execute:
 
 ```bash
 pip install -e .
 ```
 
-This will allow you to run the code with `glow` command in the terminal
+This will allow you to run the code with `glow` command in the terminal.
 
 <br/>
 
 ## Using G.L.O.W.
 
-Firstly it is required a CSV file with some printing parameters, such as [example](docs/example/example.csv)
+Firstly it is required a CSV file with some printing parameters, such as [example](docs/example/example.csv).
 
 |   idx |   laser_power |   scanning_speed |   rpm_1 |   rpm_2 |   width |   height |   hatch_spacing |
 |------:|--------------:|-----------------:|--------:|--------:|--------:|---------:|----------------:|
@@ -91,15 +91,15 @@ Firstly it is required a CSV file with some printing parameters, such as [exampl
 |     5 |         52.45 |           349.15 |     0.4 |       0 | 1.00199 | 0.342144 |             0.3 |
 | ...   | ...           | ...              | ...     | ...     | ...     | ...      | ...             |
 
-After opening the App, drop or select the CSV file into the upload box
+After opening the App, drop or select the CSV file into the upload box.
 
 ![File upload box](docs/example/file_upload_box.png)
 
-And input the geometric parameters
+And input the geometric parameters.
 
 <img src="docs/example/input_parameters.png" alt="Input parameters" width="400"/>
 
-Pressing `Calculate positions` should display the resulting configuration on the plot
+Pressing `Calculate positions` should display the resulting configuration on the plot.
 
 <img src="docs/example/printing_configuration.png" alt="Printing configuration" width="500">
 
@@ -107,7 +107,7 @@ If satisfied, press `Generate G-Code` to generate the [GCODE](docs/example/examp
 
 ![NC Viewer](docs/example/nc_viewer.png)
 
-> For more detailed and specific informations read [documentation](docs/info.md) or use the information button in the top-right corner of the GUI
+> For more detailed and specific informations read the [Documentation](docs/info.md) or use the information button in the top-right corner of the GUI.
 
 <hr>
 
@@ -121,4 +121,4 @@ If satisfied, press `Generate G-Code` to generate the [GCODE](docs/example/examp
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) for details.

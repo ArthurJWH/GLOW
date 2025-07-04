@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri May 17 19:01:47 2024
-
-@author: xiao
-
-Contains helper functions and result visualization functions
+Adapted from the original project on xshang93/AIDED
 """
 
 import cv2
@@ -30,12 +26,6 @@ para2geom = load_model(resource_path("assets\\ML_models\\para2geom.h5"), compile
 para2geom_pca = joblib.load(resource_path("assets\\ML_models\\pca_transformer.pkl"))
 sc = joblib.load(resource_path("assets\\ML_models\\sc.bin"))
 hs2angle = joblib.load(resource_path("assets\\ML_models\\hs2angle.pkl"))
-
-# prediction directly from para2geom model.
-
-# This function is used to predict what a 2d print surface is like under given printing parameters
-# This function is used to predict what a 3d print cube is like under given printing parameters
-# Make sure bottom of new deposited materails are overlapping with the lowest point on the previous layer
 
 
 def meltpool_geom_cal(
@@ -245,17 +235,3 @@ def meltpool_geom_cal(
             t_ratio = t_ratio - 0.01
 
     return width * scale, layer_height * scale, t_ratio
-
-
-if __name__ == "__main__":
-    print(
-        x := meltpool_geom_cal(
-            power=40,
-            speed=700,
-            rpm=2,
-            hatch_spacing=0.5,
-            num_tracks=10,
-            num_layers=3,
-            rotate=False,
-        )
-    )

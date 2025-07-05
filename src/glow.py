@@ -3,7 +3,7 @@ G.L.O.W. App
 
 Author: Arthur Jiun Wei Hwang
 
-Latest update: 03-07-2025
+Latest update: 04-07-2025
 """
 
 import math
@@ -66,7 +66,7 @@ class MainWindow(QMainWindow):
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
 
-        calculator = GLOWCalculator()
+        calculator = GLOWgui()
         scroll_area.setWidget(calculator)
 
         self.setCentralWidget(scroll_area)
@@ -118,66 +118,78 @@ class MainWindow(QMainWindow):
         self.info_dialog.show()
 
 
-class GLOWCalculator(QWidget):
-    __slots__ = [
-        "main_layout",
+class GLOWgui(QWidget):
+    __slots__ = (
+        "ac1_input",
+        "ac2_input",
+        "apg_input",
+        "ax",
+        "camera_delay",
+        "camera_exposure",
+        "camera_interval",
+        "canvas",
+        "cdl_input",
+        "cdt_input",
+        "cdo_input",
+        "clicked",
+        "clicked_x",
+        "clicked_y",
+        "cube_height",
+        "cube_hspacing",
+        "cube_length",
+        "cube_num",
+        "cube_vspacing",
+        "display",
+        "dir_input",
+        "dragging",
+        "fe_input",
+        "figure",
         "filedrop",
-        "use_ml",
+        "gcode",
+        "gfr_input",
+        "h1_input",
+        "h2_input",
+        "horizontal",
+        "last_mouse_pos",
+        "main_layout",
+        "margin_c",
+        "margin_r",
+        "mscode",
+        "nc_viewer",
+        "nps_input",
+        "position",
+        "positions",
+        "settings",
+        "sh_input",
         "shape_combobox",
         "stack",
+        "stack_s",
+        "substrate_combobox",
+        "substrate_height",
+        "substrate_radius",
+        "substrate_width",
+        "track_hspacing",
         "track_length",
         "track_num",
-        "track_hspacing",
         "track_vspacing",
-        "widget_track",
-        "wall_length",
-        "wall_height",
-        "wall_num",
-        "wall_hspacing",
-        "wall_vspacing",
-        "widget_wall",
-        "cube_length",
-        "cube_height",
-        "cube_num",
-        "cube_hspacing",
-        "cube_vspacing",
-        "widget_cube",
-        "horizontal",
-        "substrate_combobox",
-        "stack_s",
-        "substrate_width",
-        "substrate_height",
-        "margin_r",
-        "widget_rectangle",
-        "substrate_radius",
-        "margin_c",
-        "widget_circle",
-        "positions",
-        "figure",
-        "canvas",
-        "ax",
-        "display",
-        "settings",
-        "dir_input",
-        "sh_input",
-        "nps_input",
-        "gfr_input",
-        "wt_input",
-        "cdt_input",
-        "cdl_input",
-        "cdo_input",
         "use_camera",
-        "camera_exposure",
-        "camera_delay",
-        "camera_interval",
-        "mscode",
-        "fe_input",
-        "apg_input",
-        "h1_input",
-        "ac1_input",
-        "h2_input",
-        "ac2_input",
-    ]
+        "use_ml",
+        "use_ml_all",
+        "use_ml_h",
+        "use_ml_lh",
+        "use_ml_w",
+        "wall_height",
+        "wall_hspacing",
+        "wall_length",
+        "wall_num",
+        "wall_vspacing",
+        "widget_circle",
+        "widget_cube",
+        "widget_rectangle",
+        "widget_track",
+        "widget_wall",
+        "wt_input",
+    )
 
     def __init__(self) -> None:
         super().__init__()
@@ -758,9 +770,9 @@ class GLOWCalculator(QWidget):
             self.clicked_x = event.xdata
             self.clicked_y = event.ydata
 
-    def on_scroll(self, event):
+    def on_scroll(self, event) -> None:
         base_scale = 1.1
-        scale_factor = base_scale if event.step > 0 else 1 / base_scale
+        scale_factor = 1 / base_scale if event.step > 0 else base_scale
 
         xdata = event.xdata
         ydata = event.ydata
@@ -783,7 +795,7 @@ class GLOWCalculator(QWidget):
         self.ax.set_ylim(new_ylim)
         self.canvas.draw()
 
-    def on_motion(self, event):
+    def on_motion(self, event) -> None:
         if self.clicked and event.xdata is not None and event.ydata is not None:
             self.dragging = True
             dx = event.x - self.last_mouse_pos[0]
@@ -803,7 +815,7 @@ class GLOWCalculator(QWidget):
             self.ax.set_ylim([y + dy_data for y in ylim])
             self.canvas.draw()
 
-    def on_release(self, event):
+    def on_release(self, event) -> None:
         if self.clicked and not self.dragging:
             self.display.addItem(f"Clicked at x={self.clicked_x}, y={self.clicked_y}")
             self.display.scrollToBottom()
@@ -811,7 +823,7 @@ class GLOWCalculator(QWidget):
         self.dragging = False
         self.last_mouse_pos = None
 
-    def on_r_press(self, event):
+    def on_r_press(self, event) -> None:
         if event.key == "r":
             self.ax.autoscale()
             self.canvas.draw()

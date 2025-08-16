@@ -18,6 +18,7 @@ from PyQt6.QtWidgets import (
     QMainWindow,
     QDialog,
     QFrame,
+    QGroupBox,
     QWidget,
     QTabWidget,
     QStackedWidget,
@@ -206,7 +207,6 @@ class GLOWgui(QWidget):
         ### Main page ###
 
         self.main_layout = QHBoxLayout(main_widget)
-        self.main_layout.setSpacing(3)
         self.main_layout.setContentsMargins(20, 10, 20, 20)
 
         side_tab = QVBoxLayout()
@@ -215,9 +215,6 @@ class GLOWgui(QWidget):
         title = QLabel()
         pixmap = QPixmap(resource_path("assets\\img\\title.png"))
         pixmap = pixmap.scaledToHeight(50, Qt.TransformationMode.SmoothTransformation)
-        # title.setStyleSheet(
-        #     "QLabel {font-family: 'Roboto'; font-size: 24px; font-weight: 700; color: #000000;}"
-        # )
         title.setPixmap(pixmap)
         title.setScaledContents(True)
         title_layout.addWidget(title)
@@ -227,44 +224,70 @@ class GLOWgui(QWidget):
         self.filedrop = FileDrop()
         side_tab.addWidget(self.filedrop, 2)
 
-        ml_layout = QHBoxLayout()
-        self.use_ml = QPushButton("Use ML model prediction", clicked=self.open_ml_options)
-        ml_layout.addWidget(self.use_ml, 1)
-        ml_layout.addStretch(4)
-        self.use_ml_all = QCheckBox("Use all")
-        self.use_ml_all.setChecked(False)
-        self.use_ml_all.toggled.connect(
+        use_ml = QGroupBox("Use ML model prediction")
+        use_ml.setCheckable(True)
+        use_ml.toggled.connect(
             lambda state: [
-                self.use_ml.setChecked(state),
                 self.use_ml_w.setChecked(state),
                 self.use_ml_h.setChecked(state),
                 # self.use_ml_angle.setChecked(state),
                 self.use_ml_lh.setChecked(state),
-            ] if state is True else None
+                use_ml.setStyleSheet(
+                    """
+                        QGroupBox {
+                            border: 2px solid #d0d0d0;
+                            border-radius: 8px;
+                            color: #000000;
+                        }
+                        QCheckBox {
+                            color: #000000;
+                        }
+                    """
+                    if state
+                    else """
+                            QGroupBox {
+                                border: 2px solid #d0d0d0;
+                                border-radius: 8px;
+                                color: #606060;
+                            }
+                            QCheckBox {
+                                color: #606060;
+                            }
+                        """
+                ),
+            ]
         )
+        side_tab.addWidget(use_ml, 2)
+
+        ml_layout = QHBoxLayout(use_ml)
         self.use_ml_w = QCheckBox("Width")
         self.use_ml_w.setChecked(False)
         self.use_ml_w.toggled.connect(
-            lambda state: self.use_ml_all.setChecked(state) if state is False else None
+            lambda state: use_ml.setChecked(state)
+            if not self.use_ml_h.isChecked() and not self.use_ml_lh.isChecked()
+            else None
         )
+        ml_layout.addWidget(self.use_ml_w)
         self.use_ml_h = QCheckBox("Height")
         self.use_ml_h.setChecked(False)
         self.use_ml_h.toggled.connect(
-            lambda state: self.use_ml_all.setChecked(False) if state is False else None
+            lambda state: use_ml.setChecked(state)
+            if not self.use_ml_w.isChecked() and not self.use_ml_lh.isChecked()
+            else None
         )
+        ml_layout.addWidget(self.use_ml_h)
         # self.use_ml_angle = QCheckBox("Tilt angle")
         # self.use_ml_angle.setChecked(False)
-        # self.use_ml_angle.toggled.connect(
-        #     lambda state: self.use_ml_all.setChecked(False) if state is False else None
-        # )
+        # ml_layout.addWidget(self.use_ml_angle)
         self.use_ml_lh = QCheckBox("Layer height")
         self.use_ml_lh.setChecked(False)
         self.use_ml_lh.toggled.connect(
-            lambda state: self.use_ml_all.setChecked(False) if state is False else None
+            lambda state: use_ml.setChecked(state)
+            if not self.use_ml_w.isChecked() and not self.use_ml_h.isChecked()
+            else None
         )
-        side_tab.addLayout(ml_layout, 1)
-
-        side_tab.addStretch(1)
+        ml_layout.addWidget(self.use_ml_lh)
+        use_ml.setChecked(False)
 
         shape_layout = QHBoxLayout()
         shape_label = QLabel("Select the shape of the print: ")
@@ -340,9 +363,6 @@ class GLOWgui(QWidget):
 
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
-
-        # self.canvas.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        # self.canvas.setFocus()
         self.canvas.mpl_connect("figure_enter_event", lambda _: self.canvas.setFocus())
         self.canvas.mpl_connect(
             "figure_leave_event", lambda _: self.canvas.clearFocus()
@@ -844,26 +864,6 @@ class GLOWgui(QWidget):
             error.setForeground(QColor("#ff0000"))
             self.display.addItem(error)
             self.display.scrollToBottom()
-
-    def open_ml_options(self) -> None:
-        button = self.sender()
-        button_pos = button.mapToGlobal(button.rect().bottomLeft())
-
-        ml_dropdown = QFrame(self, Qt.WindowType.Popup)
-        ml_dropdown.move(button_pos)
-        ml_dropdown.setFrameShape(QFrame.Shape.Box)
-        ml_dropdown.setContentsMargins(20, 10, 20, 20)
-        ml_dropdown.setWindowTitle("Use ML prediction for:")
-
-        ml_layout = QVBoxLayout(ml_dropdown)
-
-        ml_layout.addWidget(self.use_ml_all, 1)
-        ml_layout.addWidget(self.use_ml_w, 1)
-        ml_layout.addWidget(self.use_ml_h, 1)
-        # ml_layout.addWidget(self.use_ml_angle, 1)
-        ml_layout.addWidget(self.use_ml_lh, 1)
-
-        ml_dropdown.show()
 
     def create_widget_track(self) -> QWidget:
         w = QWidget()
@@ -1847,6 +1847,11 @@ def gui():
     app = QApplication(sys.argv)
     app.setStyleSheet(
         """
+        QGroupBox {
+            border: 2px solid #d0d0d0;
+            border-radius: 8px;
+            background-color: #000000;
+        }
         QWidget {
             background-color: #ffffff;
             color: #000000;
@@ -1894,5 +1899,3 @@ def gui():
     window = MainWindow(app)
     window.show()
     sys.exit(app.exec())
-
-

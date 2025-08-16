@@ -46,9 +46,11 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from ml import meltpool_geom_cal
 
 
-def resource_path(relative_path: str) -> str:
+def resource_path(*relative_path: str) -> str:
     base_path = Path(__file__).resolve().parent.parent
-    return str(Path(base_path) / relative_path)
+    for path in relative_path:
+        base_path = base_path / path
+    return str(base_path)
 
 
 class MainWindow(QMainWindow):
@@ -57,11 +59,11 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("G-Code for Laser Operated Work")
 
         if sys.platform.startswith("win"):
-            app.setWindowIcon(QIcon(resource_path("assets\\img\\icon.ico")))
+            app.setWindowIcon(QIcon(resource_path("assets", "img", "icon.ico")))
         elif sys.platform == "darwin":
-            app.setWindowIcon(QIcon(resource_path("assets\\img\\icon.icns")))
+            app.setWindowIcon(QIcon(resource_path("assets", "img", "icon.icns")))
         else:
-            app.setWindowIcon(QIcon(resource_path("assets\\img\\icon.png")))
+            app.setWindowIcon(QIcon(resource_path("assets", "img", "icon.png")))
         self.resize(1200, 600)
 
         scroll_area = QScrollArea()
@@ -106,7 +108,7 @@ class MainWindow(QMainWindow):
         self.info_dialog.setContentsMargins(20, 0, 20, 20)
         self.info_dialog.move(600, 0)
         self.info_dialog.setWindowTitle("Information")
-        with open(resource_path("docs\\info.md"), "r", encoding="utf-8") as f:
+        with open(resource_path("docs", "info.md"), "r", encoding="utf-8") as f:
             md_text = f.read()
 
         info = QTextEdit()
@@ -213,7 +215,7 @@ class GLOWgui(QWidget):
 
         title_layout = QHBoxLayout()
         title = QLabel()
-        pixmap = QPixmap(resource_path("assets\\img\\title.png"))
+        pixmap = QPixmap(resource_path("assets", "img", "title.png"))
         pixmap = pixmap.scaledToHeight(50, Qt.TransformationMode.SmoothTransformation)
         title.setPixmap(pixmap)
         title.setScaledContents(True)
@@ -410,7 +412,7 @@ class GLOWgui(QWidget):
         settings_layout.setSpacing(3)
         settings_layout.setContentsMargins(20, 10, 20, 20)
         self.settings = QSettings(
-            resource_path("src\\machine settings"), QSettings.Format.IniFormat
+            resource_path("src", "machine settings"), QSettings.Format.IniFormat
         )
 
         title2 = QLabel("Machine Settings")

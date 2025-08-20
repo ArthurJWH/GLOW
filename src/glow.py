@@ -1185,12 +1185,12 @@ class GLOWgui(QWidget):
             self.gcode.append("G4 P0.001 ; added because G1 being skipped\n")
             if self.use_camera.isChecked():
                 self.gcode.append(
-                    f"{self.mscode['gcode_camera_on'].format(e=self.camera_exposure.text())} ; turn camera on"
+                    f"{self.mscode['gcode_camera_on'].format(e=self.camera_exposure.text())} ; turn camera on\n"
                 )
-            self.gcode.append(
-                f"{self.mscode['gcode_laser_power'].format(p=0)} ; set laser power to 0%"
-            )
             self.gcode.append(f"{self.mscode['gcode_laser_on']} ; turn on the laser\n")
+            self.gcode.append(
+                f"{self.mscode['gcode_laser_power'].format(p=0)} ; set laser power to 0%\n"
+            )
 
             try:
                 csv_data = pd.read_csv(self.filedrop.file_path)

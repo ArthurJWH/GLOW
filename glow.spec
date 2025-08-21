@@ -1,13 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 a = Analysis(
-    ['src\\main.py'],
+    ['src/main.py'],
     pathex=['src'],
     binaries=[],
     datas=[
-        ('assets\\img\\', 'assets\\img'),
-        ('assets\\ML_models\\', 'assets\\ML_models'),
-        ('docs\\', 'docs')
+        ('assets/img/', 'assets/img'),
+        ('assets/ML_models/', 'assets/ML_models'),
+        ('docs/', 'docs')
     ],
     hiddenimports=['cv2', 'sklearn', 'sklearn.pipeline', 'sklearn.neural_network'],
     hookspath=[],
@@ -43,7 +43,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['assets\\img\\icon.png'],
+    icon=['assets/img/icon.png'],
     exclude_binaries=True,
 )
 

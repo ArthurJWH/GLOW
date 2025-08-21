@@ -48,7 +48,7 @@ To install G.L.O.W. app you can:
 
 1. Download [`glow_1.0_setup.exe`](glow_1.0_setup.exe) from the repository and run the installer (no repository cloning required) or
 
-2. Clone the repository and follow [`glowapp.ipynb`](glowapp.ipynb) instructions.
+2. Clone the repository and follow [`glowapp.ipynb`](glowapp.ipynb) instructions (allows for customization in code).
 
 <br/>
 
@@ -80,7 +80,7 @@ This will allow you to run the code with `glow` command in the terminal.
 
 ## Using G.L.O.W.
 
-Firstly it is required a CSV file with some printing parameters, such as [example](docs/example/example.csv).
+To generate the GCODE it is required a CSV file with some printing parameters, such as [example](docs/example/example.csv).
 
 |   idx |   laser_power |   scanning_speed |   rpm_1 |   rpm_2 |   width |   height |   hatch_spacing |
 |------:|--------------:|-----------------:|--------:|--------:|--------:|---------:|----------------:|
@@ -93,9 +93,9 @@ Firstly it is required a CSV file with some printing parameters, such as [exampl
 
 After opening the App, drop or select the CSV file into the upload box.
 
-![File upload box](docs/example/file_upload_box.png)
+![Main page](docs/example/main_page.png)
 
-And input the geometric parameters.
+Follow the left column to input the geometric parameters.
 
 <img src="docs/example/input_parameters.png" alt="Input parameters" width="400"/>
 

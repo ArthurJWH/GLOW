@@ -11,7 +11,7 @@ import sys
 import pandas as pd
 from pathlib import Path
 
-from PyQt6.QtCore import Qt, QSettings, QUrl
+from PyQt6.QtCore import Qt, QSettings, QUrl, QStandardPaths, QCoreApplication
 from PyQt6.QtGui import QDragEnterEvent, QDropEvent, QMouseEvent, QColor, QIcon, QPixmap
 from PyQt6.QtWidgets import (
     QApplication,
@@ -411,8 +411,17 @@ class GLOWgui(QWidget):
         settings_layout = QVBoxLayout(setting_widget)
         settings_layout.setSpacing(3)
         settings_layout.setContentsMargins(20, 10, 20, 20)
+
+        QCoreApplication.setApplicationName("GLOW")
+        appdata = Path(
+            QStandardPaths.writableLocation(
+                QStandardPaths.StandardLocation.AppDataLocation
+            )
+        )
+        appdata.mkdir(parents=True, exist_ok=True)
+
         self.settings = QSettings(
-            resource_path("src", "machine settings"), QSettings.Format.IniFormat
+            str(appdata / "machine settings.ini"), QSettings.Format.IniFormat
         )
 
         title2 = QLabel("Machine Settings")

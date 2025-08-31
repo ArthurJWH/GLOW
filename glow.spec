@@ -7,7 +7,7 @@ a = Analysis(
     datas=[
         ('assets/img/', 'assets/img'),
         ('assets/ML_models/', 'assets/ML_models'),
-        ('docs/', 'docs')
+        ('docs/info.md', 'docs')
     ],
     hiddenimports=['cv2', 'sklearn', 'sklearn.pipeline', 'sklearn.neural_network'],
     hookspath=[],

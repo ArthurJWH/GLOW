@@ -1242,9 +1242,7 @@ class GLOWgui(QWidget):
             ml_h = (
                 "height" not in csv_data or self.use_ml_h.isChecked()
             ) and shape != "Single Track"
-            ml_lh = (
-                "layer_height" not in csv_data or self.use_ml_lh.isChecked()
-            ) and shape != "Single Track"
+            ml_lh = self.use_ml_lh.isChecked() and shape != "Single Track"
 
             if ml_w or ml_h or ml_lh:
                 self.display.addItem("Using machine learning model...")

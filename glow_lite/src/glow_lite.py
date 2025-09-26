@@ -1173,11 +1173,6 @@ class GLOWgui(QWidget):
             if "height" not in csv_data and shape != "Single Track":
                 self.display.addItem("There is no 'height' column in the CSV file")
                 valid = False
-            if "layer_height" not in csv_data and shape != "Single Track":
-                self.display.addItem(
-                    "There is no 'layer height' column in the CSV file"
-                )
-                valid = False
             if not valid:
                 return None
 

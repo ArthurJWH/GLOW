@@ -11,8 +11,8 @@ Each row of the CSV file must contain its printing information, including:
  - `scanning_speed` : is the scanning speed of the print, in mm/min;
  - `rpm_1` : is the rpm for hopper 1;
  - `rpm_2` : is the rpm for hopper 2;
- - `width` : is the width of the printed tracks, in mm (optional);
- - `height` : is the height of the printed tracks, in mm (optional);
+ - `width` : is the width of one printed track, in mm (optional);
+ - `height` : is the height of one printed track, in mm (optional);
  - `hatch_spacing` : is the ideal spacing between adjacent tracks as a fraction (e.g. 0.5) of `width` (optional if not printing Cube);
  - `layer_height` : is the ideal spacing between successive layers as a fraction (e.g. 0.5) of `height` (optional);
  - `layers` : is the number of layers that each row will be used in, the code will automatically change the row between objects (optional);

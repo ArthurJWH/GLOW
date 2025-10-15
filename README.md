@@ -93,7 +93,7 @@ To generate the GCODE it is required a CSV file with some printing parameters, s
 
 After opening the App, drop or select the CSV file into the upload box.
 
-![Main page](docs/example/main_page.png)
+<img src="docs/example/main_page.png" alt="Main page" width="600"/>
 
 Follow the left column to input the geometric parameters.
 
@@ -105,7 +105,8 @@ Pressing `Calculate positions` should display the resulting configuration on the
 
 If satisfied, press `Generate G-Code` to generate the [GCODE](docs/example/example.gcode)
 
-![NC Viewer](docs/example/nc_viewer.png)
+<!-- ![NC Viewer](docs/example/nc_viewer.png) -->
+<img src="docs/example/nc_viewer.png" alt="NC Viewer" width="600"/>
 
 > For more detailed and specific informations read the [Documentation](docs/info.md) or use the information button in the top-right corner of the GUI.
 

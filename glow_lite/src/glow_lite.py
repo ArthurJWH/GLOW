@@ -1023,8 +1023,6 @@ class GLOWgui(QWidget):
                     (x, y, 0)
                 )  # TODO : currently z is considered tobe leveled with substrate
 
-            self.plot()
-
         elif self.substrate_combobox.currentText() == "Circle":
             radius = float(self.substrate_radius.text())
             margin = float(self.margin_c.text())

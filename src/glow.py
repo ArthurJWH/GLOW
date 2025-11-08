@@ -1255,7 +1255,7 @@ class GLOWgui(QWidget):
                         speed=row.scanning_speed,
                         rpm=row.rpm_1 + row.rpm_2,
                         hatch_spacing=row.hatch_spacing,
-                        rotate=shape == "Cube",
+                        rotate=True, # shape == "Cube" (if False -> porosity diverges)
                         num_tracks=5 if shape == "Cube" else 1,
                         num_layers=3,
                     )

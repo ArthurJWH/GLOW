@@ -1,7 +1,7 @@
 <!-- Ctrl + Shift + V to read -->
 <picture>
-  <source media="(prefers-color-scheme: dark)" src="https://raw.githubusercontent.com/ArthurJWH/GLOW/main/assets/img/title-dark-mode.png">
-  <source media="(prefers-color-scheme: light)" src="https://raw.githubusercontent.com/ArthurJWH/GLOW/main/assets/img/title-light-mode.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ArthurJWH/GLOW/main/assets/img/title-dark-mode.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/ArthurJWH/GLOW/main/assets/img/title-light-mode.png">
   <img alt="GLOW Logo" src="https://raw.githubusercontent.com/ArthurJWH/GLOW/main/assets/img/title-light-mode.png">
 </picture>
 

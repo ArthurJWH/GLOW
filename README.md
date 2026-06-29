@@ -1,4 +1,9 @@
-![GLOW Logo](assets/img/title.png)
+<!-- Ctrl + Shift + V to read -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" src="assets/img/title-dark-mode.png">
+  <source media="(prefers-color-scheme: light)" src="assets/img/title-light-mode.png">
+  <img alt="GLOW Logo" src="assets/img/title-light-mode.png">
+</picture>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8--3.11-blue.svg)](https://www.python.org/downloads/)

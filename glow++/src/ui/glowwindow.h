@@ -81,13 +81,13 @@ class GlowWindow : public QMainWindow{
         QString shape;
         QString substrate;
 
-        float hLength;
-        float vLength;
-        float shapeHeight;
-        std::vector<std::array<float, 3>> positions;
-        std::array<float, 3> position;
-        float clickedX;
-        float clickedY;
+        double hLength;
+        double vLength;
+        double shapeHeight;
+        std::vector<std::array<double, 3>> positions;
+        std::array<double, 3> position;
+        double clickedX;
+        double clickedY;
 
         QString gcode;
 
@@ -100,7 +100,7 @@ class GlowWindow : public QMainWindow{
         void calculatePositions();
         void addPosition();
         void generateGcode();
-        void strokeGcode(const float (&initialPos)[3], const float (&strokeData)[2], float strokeSize, char strokeDirection, int layer, int track);
+        void strokeGcode(const double (&initialPos)[3], const double (&strokeData)[2], double strokeSize, char strokeDirection, int layer, int track);
 
         void browse();
         void openCameraSettings();

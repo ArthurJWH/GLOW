@@ -706,15 +706,15 @@ void GlowWindow::plot(){
     // view->scene()->addLine(QLineF(10, 30, 80, 50), QPen(Qt::black, 1));
     for(auto xy : positions){
         if(shape == "Single Track"){
-            auto xyFinal = printHorizontal->isChecked() ? std::array<float, 2> {xy[0] + trackLength->text().toFloat(), xy[1]} : std::array<float, 2> {xy[0], xy[1] + trackLength->text().toFloat()};
+            auto xyFinal = printHorizontal->isChecked() ? std::array<double, 2> {xy[0] + trackLength->text().toDouble(), xy[1]} : std::array<double, 2> {xy[0], xy[1] + trackLength->text().toDouble()};
             view->scene()->addLine(QLineF(xy[0], -xy[1], xyFinal[0], -xyFinal[1]), QPen(Qt::blue, 0.25));
         }
         else if(shape == "Thin Wall"){
-            auto xyFinal = printHorizontal->isChecked() ? std::array<float, 2> {xy[0] + wallLength->text().toFloat(), xy[1]} : std::array<float, 2> {xy[0], xy[1] + wallLength->text().toFloat()};
+            auto xyFinal = printHorizontal->isChecked() ? std::array<double, 2> {xy[0] + wallLength->text().toDouble(), xy[1]} : std::array<double, 2> {xy[0], xy[1] + wallLength->text().toDouble()};
             view->scene()->addLine(QLineF(xy[0], -xy[1], xyFinal[0], -xyFinal[1]), QPen(Qt::blue, 0.25));
         }
         else if(shape == "Cube"){
-            view->scene()->addRect(QRectF(xy[0], -xy[1], cubeLength->text().toFloat(), -cubeLength->text().toFloat()), QPen(Qt::blue, 0.25), QBrush(Qt::blue));
+            view->scene()->addRect(QRectF(xy[0], -xy[1], cubeLength->text().toDouble(), -cubeLength->text().toDouble()), QPen(Qt::blue, 0.25), QBrush(Qt::blue));
         }
     }
 
@@ -723,47 +723,47 @@ void GlowWindow::plot(){
 }
 void GlowWindow::calculatePositions(){
     positions = {};
-    int num;
-    float hDistance;
-    float vDistance;
+    int num = 0;
+    double hDistance = 0.0;
+    double vDistance = 0.0;
     shape = shapeCombobox->currentText();
     if(shape == "Single Track"){
         num = trackNum->text().toInt();
-        hLength = printHorizontal->isChecked() ? trackLength->text().toFloat() : 0;
-        vLength = printHorizontal->isChecked() ? 0 : trackLength->text().toFloat();
+        hLength = printHorizontal->isChecked() ? trackLength->text().toDouble() : 0;
+        vLength = printHorizontal->isChecked() ? 0 : trackLength->text().toDouble();
         shapeHeight = 0;
-        hDistance = trackHSpacing->text().toFloat();
-        vDistance = trackVSpacing->text().toFloat();
+        hDistance = trackHSpacing->text().toDouble();
+        vDistance = trackVSpacing->text().toDouble();
     }
     else if(shape == "Thin Wall"){
         num = wallNum->text().toInt();
-        hLength = printHorizontal->isChecked() ? wallLength->text().toFloat() : 0;
-        vLength = printHorizontal->isChecked() ? 0 : wallLength->text().toFloat();
-        shapeHeight = wallHeight->text().toFloat();
-        hDistance = wallHSpacing->text().toFloat();
-        vDistance = wallVSpacing->text().toFloat();
+        hLength = printHorizontal->isChecked() ? wallLength->text().toDouble() : 0;
+        vLength = printHorizontal->isChecked() ? 0 : wallLength->text().toDouble();
+        shapeHeight = wallHeight->text().toDouble();
+        hDistance = wallHSpacing->text().toDouble();
+        vDistance = wallVSpacing->text().toDouble();
     }
     else if(shape == "Cube"){
         num = cubeNum->text().toInt();
-        hLength = cubeLength->text().toFloat();
-        vLength = cubeLength->text().toFloat();
-        shapeHeight = cubeHeight->text().toFloat();
-        hDistance = wallHSpacing->text().toFloat();
-        vDistance = wallVSpacing->text().toFloat();
+        hLength = cubeLength->text().toDouble();
+        vLength = cubeLength->text().toDouble();
+        shapeHeight = cubeHeight->text().toDouble();
+        hDistance = cubeHSpacing->text().toDouble();
+        vDistance = cubeVSpacing->text().toDouble();
     }
 
-    float width;
-    float height;
-    float margin;
+    double width;
+    double height;
+    double margin;
     int cols;
     int rows;
     substrate = substrateCombobox->currentText();
     if(substrate == "Rectangle"){
-        width = substrateWidth->text().toFloat();
-        height = substrateHeight->text().toFloat();
-        margin = substrateMarginR->text().toFloat();
+        width = substrateWidth->text().toDouble();
+        height = substrateHeight->text().toDouble();
+        margin = substrateMarginR->text().toDouble();
         cols = (width - 2 * margin + hDistance) / (hLength + hDistance);
-        rows = std::ceil(num / cols);
+        rows = std::ceil(static_cast<double>(num) / cols);
 
         if(rows * vLength + (rows - 1) * vDistance > height - 2 * margin){
             displayText->addItem(toQString("Cannot fit ", num, " squares of size ", hLength, "x", vLength, " in a rectangle of dimensions ", width, "x", height));
@@ -771,30 +771,29 @@ void GlowWindow::calculatePositions(){
             return;
         }
 
-        float x0 = margin;
-        float y0 = margin;
+        double x0 = margin;
+        double y0 = margin;
 
         for(int i = 0; i < num; i++){
             int row = i / cols;
             int col = i % cols;
-            float x = x0 + col * (hLength + hDistance);
-            float y = y0 + row * (vLength + vDistance);
+            double x = x0 + col * (hLength + hDistance);
+            double y = y0 + row * (vLength + vDistance);
             positions.push_back({x, y, 0});
         }
-        plot();
     }
     else if(substrate == "Circle"){
-        float radius = substrateRadius->text().toFloat();
-        float margin = substrateMarginC->text().toFloat();
+        double radius = substrateRadius->text().toDouble();
+        double margin = substrateMarginC->text().toDouble();
 
         std::vector<std::array<int, 3>> configs = {};
         for(cols = num + 1; cols > 1; cols--){
-            rows = std::ceil(num / cols);
+            rows = std::ceil(static_cast<double>(num) / cols);
 
-            float halfWidth = (cols * hLength + (cols - 1) * hDistance) / 2;
-            float halfHeight = (rows * vLength + (rows - 1) * vDistance) / 2;
+            double halfWidth = (cols * hLength + (cols - 1) * hDistance) / 2;
+            double halfHeight = (rows * vLength + (rows - 1) * vDistance) / 2;
 
-            if(std::pow(halfWidth, 2) + std::pow(halfHeight, 2) <= std::pow(radius - margin, 2)){
+            if(halfWidth * halfWidth + halfHeight * halfHeight <= (radius - margin) * (radius - margin)){
                 configs.push_back({cols, rows, cols * rows - num});
             }
         }
@@ -812,17 +811,17 @@ void GlowWindow::calculatePositions(){
         cols = min[0];
         rows = min[1];
 
-        float gridWidth = cols * hLength + (cols - 1) * hDistance;
-        float gridHeight = rows * vLength + (rows - 1) * vDistance;
+        double gridWidth = cols * hLength + (cols - 1) * hDistance;
+        double gridHeight = rows * vLength + (rows - 1) * vDistance;
 
-        float x0 = radius - gridWidth / 2;
-        float y0 = radius - gridHeight / 2;
+        double x0 = radius - gridWidth / 2;
+        double y0 = radius - gridHeight / 2;
 
         for(int i = 0; i < num; i++){
             int row = i / cols;
             int col = i % cols;
-            float x = x0 + col * (hLength + hDistance);
-            float y = y0 + row * (vLength + vDistance);
+            double x = x0 + col * (hLength + hDistance);
+            double y = y0 + row * (vLength + vDistance);
             positions.push_back({x, y, 0});
         }
     }
@@ -862,8 +861,8 @@ void GlowWindow::generateGcode(){
     gcode = "";
     int idx = 0;
     position = {0, 0, 0};
-    float lastRPM1 = -1;
-    float lastRPM2 = -1;
+    double lastRPM1 = -1;
+    double lastRPM2 = -1;
 
     gcode += toQString(";====", shape, " G-Code====\n");
     gcode += "G90 G54 G64 G50 G17 G40 G80 G94 G91.1 G49\n";
@@ -899,7 +898,7 @@ void GlowWindow::generateGcode(){
         return;
     }
 
-    std::sort(positions.begin(), positions.end(), [](const std::array<float, 3> &posA, const std::array<float, 3> &posB){return posA[1] < posB[1] or (posA[1] == posB[1] and posA[0] < posB[0]);});
+    std::sort(positions.begin(), positions.end(), [](const std::array<double, 3> &posA, const std::array<double, 3> &posB){return posA[1] < posB[1] or (posA[1] == posB[1] and posA[0] < posB[0]);});
     int size = csvData["idx"].size();
 
     static const QRegularExpression trimRegex("^[,\\s]+|[,\\s]+$");
@@ -956,42 +955,42 @@ void GlowWindow::generateGcode(){
             gcode += toQString("\nG4 P", cdo[(i - 1) % cdo.length()], " ; add cooldown between objects\n");
         }
         gcode += toQString("\n;===Starting ", shape, " ", i + 1, "===\n");
-        float x = positions[i][0];
-        float y = positions[i][1];
-        float z = positions[i][2];
-        float currHeight = 0;
+        double x = positions[i][0];
+        double y = positions[i][1];
+        double z = positions[i][2];
+        double currHeight = 0;
         int nLayers = 0;
         int currLayer = 0;
         bool vertical = !printHorizontal->isChecked();
         bool xDirection = true;
         bool yDirection = true;
-        float pLs = std::stof(pLsList[idx % size]);
-        float ssLs = std::stof(ssLsList[idx % size]);
-        float rpm1 = std::stof(rpm1List[idx % size]);
-        float rpm2 = std::stof(rpm2List[idx % size]);
-        float hsOptLs = std::stof(hsOptLsList[idx % size]);
-        float lhOptLs = std::stof(lhOptLsList[idx % size]);
-        float wLs = std::stof(wLsList[idx % size]);
-        float hLs = std::stof(hLsList[idx % size]);
-        float layers = layersList[idx % size] == "-inf" ? -INFINITY : stof(layersList[idx % size]);
+        double pLs = std::stof(pLsList[idx % size]);
+        double ssLs = std::stof(ssLsList[idx % size]);
+        double rpm1 = std::stof(rpm1List[idx % size]);
+        double rpm2 = std::stof(rpm2List[idx % size]);
+        double hsOptLs = std::stof(hsOptLsList[idx % size]);
+        double lhOptLs = std::stof(lhOptLsList[idx % size]);
+        double wLs = std::stof(wLsList[idx % size]);
+        double hLs = std::stof(hLsList[idx % size]);
+        double layers = layersList[idx % size] == "-inf" ? -INFINITY : stof(layersList[idx % size]);
         idx++;
         gcode += toQString("G1 Z", shInput->text(), " F", npsInput->text(), "\n");
         while(currHeight <= shapeHeight){
             if(currLayer > 0){
                 gcode += toQString("\nG4 P", cdl[(currLayer - 1) % cdl.length()], " ; add cooldown between layers\n");
             }
-            float currLength = 0;
+            double currLength = 0;
             int currTrack = 0;
             if(nLayers >= layers){
-                float pLs = std::stof(pLsList[idx % size]);
-                float ssLs = std::stof(ssLsList[idx % size]);
-                float rpm1 = std::stof(rpm1List[idx % size]);
-                float rpm2 = std::stof(rpm2List[idx % size]);
-                float hsOptLs = std::stof(hsOptLsList[idx % size]);
-                float lhOptLs = std::stof(lhOptLsList[idx % size]);
-                float wLs = std::stof(wLsList[idx % size]);
-                float hLs = std::stof(hLsList[idx % size]);
-                float layers = layersList[idx % size] == "-inf" ? -INFINITY : stof(layersList[idx % size]);
+                double pLs = std::stof(pLsList[idx % size]);
+                double ssLs = std::stof(ssLsList[idx % size]);
+                double rpm1 = std::stof(rpm1List[idx % size]);
+                double rpm2 = std::stof(rpm2List[idx % size]);
+                double hsOptLs = std::stof(hsOptLsList[idx % size]);
+                double lhOptLs = std::stof(lhOptLsList[idx % size]);
+                double wLs = std::stof(wLsList[idx % size]);
+                double hLs = std::stof(hLsList[idx % size]);
+                double layers = layersList[idx % size] == "-inf" ? -INFINITY : stof(layersList[idx % size]);
                 idx++;
                 nLayers = 0;
             }
@@ -1109,9 +1108,9 @@ void GlowWindow::generateGcode(){
     displayText->scrollToBottom();
     // qDebug() << gcode;
 }
-void GlowWindow::strokeGcode(const float (&initialPos)[3], const float (&strokeData)[2], float strokeSize, char strokeDirection, int layer, int track){
-    float pLs = strokeData[0];
-    float ssLs = strokeData[1];
+void GlowWindow::strokeGcode(const double (&initialPos)[3], const double (&strokeData)[2], double strokeSize, char strokeDirection, int layer, int track){
+    double pLs = strokeData[0];
+    double ssLs = strokeData[1];
     gcode += toQString("\nG1 X", initialPos[0], " Y", initialPos[1], "\n");
     gcode += toQString("G1 Z", initialPos[2], "\n");
     if(useCamera->isChecked()){

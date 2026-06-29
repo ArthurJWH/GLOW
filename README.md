@@ -1,8 +1,8 @@
 <!-- Ctrl + Shift + V to read -->
 <picture>
-  <source media="(prefers-color-scheme: dark)" src="assets/img/title-dark-mode.png">
-  <source media="(prefers-color-scheme: light)" src="assets/img/title-light-mode.png">
-  <img alt="GLOW Logo" src="assets/img/title-light-mode.png">
+  <source media="(prefers-color-scheme: dark)" src="https://raw.githubusercontent.com/ArthurJWH/GLOW/main/assets/img/title-dark-mode.png">
+  <source media="(prefers-color-scheme: light)" src="https://raw.githubusercontent.com/ArthurJWH/GLOW/main/assets/img/title-light-mode.png">
+  <img alt="GLOW Logo" src="https://raw.githubusercontent.com/ArthurJWH/GLOW/main/assets/img/title-light-mode.png">
 </picture>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)

@@ -43,6 +43,14 @@
 5. **Camera compatibility**
     - Allows camera integration for process monitoring.
 
+<br/>
+
+> Alternative versions are also available:
+> - [G.L.O.W. Lite](glow_lite/) : a lightweight version without the ML model.
+> - [G.L.O.W.++](glow++/) : an optimized C++ implementation.
+
+<br/>
+
 <hr>
 
 # Getting Started
@@ -51,9 +59,20 @@
 
 To install G.L.O.W. app you can:
 
-1. Download [`glow_1.0_setup.exe`](glow_1.0_setup.exe) from the repository and run the installer (no repository cloning required) or
+1. Download [`glow_v1.0_setup.exe`](glow_v1.0_setup.exe) from the repository and run the installer (no repository cloning required) or
 
-2. Clone the repository and follow [`glowapp.ipynb`](glowapp.ipynb) instructions (allows for customization in code).
+2. Clone the repository and follow [`glow.ipynb`](glow.ipynb) instructions (allows for customization in code).
+
+<br/>
+
+> Alternative versions are also available:
+> - G.L.O.W. Lite : 
+>   1. [`glow_lite_v1.0_setup.exe`](glow_lite/glow_lite_v1.0_setup.exe)
+>   2. [`glow_lite.ipynb`](glow_lite/glow_lite.ipynb)
+>
+> - G.L.O.W.++ :
+>   1. [`glowpp_v1.0_setup.exe`](glow++/glowpp_v1.0_setup.exe)
+>   2. N/A
 
 <br/>
 
